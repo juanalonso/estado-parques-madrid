@@ -47,7 +47,7 @@ def cargar_estado_anterior():
         try:
             with open(ARCHIVO_ESTADO, "r", encoding="utf-8") as f:
                 return json.load(f)
-        except:
+        except Exception:
             return {}
     return {}
 

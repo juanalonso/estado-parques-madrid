@@ -1,13 +1,13 @@
-# Bot de Estado de Parques de Madrid
+# Bot del Estado de Parques de Madrid ([@estadoparques](https://bsky.app/profile/estadoparques.bsky.social))
 
-Este es un bot de Python que monitoriza el estado de las alertas de los parques de Madrid y publica actualizaciones en [Bluesky](https://bsky.app/profile/estadoparques.bsky.social).
+Este bot de Python monitoriza el estado de las alertas de los parques de Madrid y publica actualizaciones en [Bluesky](https://bsky.app/profile/estadoparques.bsky.social).
 
 ## Funcionalidades
 
 - Consulta la API de alertas de parques del Ayuntamiento de Madrid.
-- Compara el estado actual con el estado anterior guardado.
+- Compara el estado actual con el estado anterior.
 - Si hay cambios en el nivel de alerta (verde, amarillo, naranja, rojo), publica un post en Bluesky con el estado de todos los parques monitorizados.
-- Mantiene un registro local del último estado conocido para detectar cambios.
+- Mantiene un registro local del último estado, para detectar cambios.
 
 ## Requisitos
 
@@ -32,7 +32,7 @@ BLUESKY_EMAIL=tu_email@ejemplo.com
 BLUESKY_PASSWORD=tu_contraseña_de_aplicación
 ```
 
-> **Nota:** Se recomienda usar una "App Password" de Bluesky en lugar de tu contraseña principal.
+> **Nota:** No uses tu contraseña de Bluesky. Utiliza una "App Password".
 
 ## Uso
 
