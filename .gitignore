@@ -1,0 +1,12 @@
+.env
+
+.venv/
+__pycache__/
+*.pyc
+
+*.code-workspace
+.vscode/
+
+.DS_Store
+
+estado_parques.json
