@@ -14,7 +14,7 @@ ARCHIVO_ESTADO = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "estado_parques.json"
 )
 ESPACIO_INVISIBLE = "\u3000"
-FLECHA_CAMBIO = "➡️"
+INDICADOR_CAMBIO = "🆕"
 BLUESKY_EMAIL = os.getenv("BLUESKY_EMAIL")
 BLUESKY_PASSWORD = os.getenv("BLUESKY_PASSWORD")
 
@@ -97,7 +97,7 @@ def main():
         emoji_semaforo = obtener_emoji(codigo)
         marca_cambio = ESPACIO_INVISIBLE
         if parque in cambios_detectados:
-            marca_cambio = FLECHA_CAMBIO
+            marca_cambio = INDICADOR_CAMBIO
         post_text += f"{marca_cambio} {emoji_semaforo} {parque}\n"
     print(post_text)
 
