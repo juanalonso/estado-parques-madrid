@@ -3,6 +3,7 @@ import json
 import os
 
 from atproto import Client
+from datetime import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -12,6 +13,9 @@ load_dotenv()
 URL_API = "https://sigma.madrid.es/hosted/rest/services/MEDIO_AMBIENTE/ALERTAS_PARQUES/MapServer/0/query?f=json&where=1%3D1&outFields=*&returnGeometry=false"
 ARCHIVO_ESTADO = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "estado_parques.json"
+)
+ARCHIVO_ESTADISTICAS = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "estadisticas_parques.ndjson"
 )
 ESPACIO_INVISIBLE = "\u3000"
 INDICADOR_CAMBIO = "🆕"
@@ -60,6 +64,22 @@ def guardar_estado_nuevo(datos):
         print(f"❌ Error guardando estado local: {e}")
 
 
+def guardar_estadisticas(eventos):
+    if not eventos:
+        return
+
+    try:
+        with open(ARCHIVO_ESTADISTICAS, "a", encoding="utf-8") as f:
+            for evento in eventos:
+                f.write(json.dumps(evento, ensure_ascii=False) + "\n")
+    except Exception as e:
+        print(f"❌ Error guardando estadísticas históricas: {e}")
+
+
+def parque_abierto(codigo):
+    return codigo < 5
+
+
 def obtener_emoji(codigo):
     """Devuelve el círculo de color según el código de alerta"""
     if codigo >= 5:
@@ -80,13 +100,26 @@ def main():
     datos_anteriores = cargar_estado_anterior()
 
     cambios_detectados = []
+    eventos_cambio = []
     hay_cambios = False
+    momento_deteccion = datetime.now().astimezone().isoformat(timespec="seconds")
 
     for parque, codigo_actual in datos_actuales.items():
         codigo_anterior = datos_anteriores.get(parque)
         if codigo_anterior != codigo_actual:
             hay_cambios = True
             cambios_detectados.append(parque)
+            if codigo_anterior is not None:
+                eventos_cambio.append(
+                    {
+                        "detected_at": momento_deteccion,
+                        "parque": parque,
+                        "from_code": codigo_anterior,
+                        "to_code": codigo_actual,
+                        "from_open": parque_abierto(codigo_anterior),
+                        "to_open": parque_abierto(codigo_actual),
+                    }
+                )
 
     post_text = ""
 
@@ -103,9 +136,10 @@ def main():
 
     if hay_cambios:
         guardar_estado_nuevo(datos_actuales)
-        client = Client()
-        client.login(BLUESKY_EMAIL, BLUESKY_PASSWORD)
-        client.post(text=post_text, langs=["es"])
+        guardar_estadisticas(eventos_cambio)
+        # client = Client()
+        # client.login(BLUESKY_EMAIL, BLUESKY_PASSWORD)
+        # client.post(text=post_text, langs=["es"])
 
 
 if __name__ == "__main__":

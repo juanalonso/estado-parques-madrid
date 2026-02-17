@@ -7,7 +7,8 @@ Este bot de Python monitoriza el estado de las alertas de los parques de Madrid 
 - Consulta la API de alertas de parques del Ayuntamiento de Madrid.
 - Compara el estado actual con el estado anterior.
 - Si hay cambios en el nivel de alerta (verde, amarillo, naranja, rojo), publica un post en Bluesky con el estado de todos los parques monitorizados.
-- Mantiene un registro local del último estado, para detectar cambios.
+- Mantiene un registro local del último estado (`estado_parques.json`) para detectar cambios.
+- Guarda un histórico de cambios en formato NDJSON (`estadisticas_parques.ndjson`) con fecha/hora de detección, parque y cambio de estado.
 
 ## Requisitos
 
@@ -45,7 +46,9 @@ python estadoparques.py
 El script:
 1.  Obtendrá los datos de la API.
 2.  Imprimirá el estado actual en la consola.
-3.  Si detecta cambios respecto a la última ejecución, publicará un post en Bluesky y actualizará el archivo `estado_parques.json`.
+3.  Si detecta cambios respecto a la última ejecución, publicará un post en Bluesky.
+4.  Actualizará el archivo `estado_parques.json` con el estado actual.
+5.  Añadirá los cambios en `cambios_parques.ndjson`.
 
 ## 🤖 Automatización
 

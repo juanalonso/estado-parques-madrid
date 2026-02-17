@@ -10,3 +10,4 @@ __pycache__/
 .DS_Store
 
 estado_parques.json
+estadisticas_parques.ndjson
