@@ -25,7 +25,6 @@ BLUESKY_PASSWORD = os.getenv("BLUESKY_PASSWORD")
 IS_PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
 
 print(f"🔍 Iniciando bot. Modo producción: {IS_PRODUCTION}")
-exit()
 
 def obtener_datos_api():
     try:
