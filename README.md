@@ -31,9 +31,12 @@ Crea un archivo `.env` en el directorio raíz del proyecto con tus credenciales 
 ```env
 BLUESKY_EMAIL=tu_email@ejemplo.com
 BLUESKY_PASSWORD=tu_contraseña_de_aplicación
+PRODUCTION=true
 ```
 
-> **Nota:** No uses tu contraseña de Bluesky. Utiliza una "App Password".
+> **Nota 1:** No uses tu contraseña de Bluesky. Utiliza una "App Password".
+
+> **Nota 2:** La diferencia entre `PRODUCTION=true` y `PRODUCTION=false` es que si `PRODUCTION=false`, no va a publicar en Bluesky, pero se sigue conectando al API, y actualizando los ficheros de estado y estadísticas.
 
 ## Uso
 

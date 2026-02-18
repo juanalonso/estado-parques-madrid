@@ -19,9 +19,13 @@ ARCHIVO_ESTADISTICAS = os.path.join(
 )
 ESPACIO_INVISIBLE = "\u3000"
 INDICADOR_CAMBIO = "🆕"
+
 BLUESKY_EMAIL = os.getenv("BLUESKY_EMAIL")
 BLUESKY_PASSWORD = os.getenv("BLUESKY_PASSWORD")
+IS_PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
 
+print(f"🔍 Iniciando bot. Modo producción: {IS_PRODUCTION}")
+exit()
 
 def obtener_datos_api():
     try:
@@ -137,9 +141,10 @@ def main():
     if hay_cambios:
         guardar_estado_nuevo(datos_actuales)
         guardar_estadisticas(eventos_cambio)
-        # client = Client()
-        # client.login(BLUESKY_EMAIL, BLUESKY_PASSWORD)
-        # client.post(text=post_text, langs=["es"])
+        if IS_PRODUCTION:
+            client = Client()
+            client.login(BLUESKY_EMAIL, BLUESKY_PASSWORD)
+            client.post(text=post_text, langs=["es"])
 
 
 if __name__ == "__main__":
