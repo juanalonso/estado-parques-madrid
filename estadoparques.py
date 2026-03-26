@@ -17,7 +17,7 @@ ARCHIVO_ESTADO = os.path.join(
 ARCHIVO_ESTADISTICAS = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "estadisticas_parques.ndjson"
 )
-ESPACIO_INVISIBLE = "" #ya no usamos \u3000 porque hemos movido el indicador al final
+ESPACIO_INVISIBLE = ""  # ya no usamos \u3000 porque hemos movido el indicador al final
 INDICADOR_CAMBIO = "🆕"
 
 BLUESKY_EMAIL = os.getenv("BLUESKY_EMAIL")
@@ -29,6 +29,7 @@ diccionario_parques = {
 }
 
 print(f"🔍 Iniciando bot. Modo producción: {IS_PRODUCTION}")
+
 
 def obtener_datos_api():
     try:
@@ -115,7 +116,15 @@ def main():
         codigo_anterior = datos_anteriores.get(parque)
         if codigo_anterior != codigo_actual:
             hay_cambios = True
-            cambios_detectados.append(parque)
+            # esto evita que el paso entre 5 y 6 se marque como cambio, ya que de cara al
+            # visitante, el parque sigue cerrado igualmente
+            ambos_cerrados = (
+                codigo_anterior is not None
+                and codigo_anterior >= 5
+                and codigo_actual >= 5
+            )
+            if not ambos_cerrados:
+                cambios_detectados.append(parque)
             if codigo_anterior is not None:
                 eventos_cambio.append(
                     {
