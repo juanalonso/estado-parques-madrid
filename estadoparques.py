@@ -17,12 +17,16 @@ ARCHIVO_ESTADO = os.path.join(
 ARCHIVO_ESTADISTICAS = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "estadisticas_parques.ndjson"
 )
-ESPACIO_INVISIBLE = "\u3000"
+ESPACIO_INVISIBLE = "" #ya no usamos \u3000 porque hemos movido el indicador al final
 INDICADOR_CAMBIO = "🆕"
 
 BLUESKY_EMAIL = os.getenv("BLUESKY_EMAIL")
 BLUESKY_PASSWORD = os.getenv("BLUESKY_PASSWORD")
 IS_PRODUCTION = os.getenv("PRODUCTION", "False").lower() == "true"
+
+diccionario_parques = {
+    "Jardín del Capricho de la Alameda de Osuna": "Jardín del Capricho"
+}
 
 print(f"🔍 Iniciando bot. Modo producción: {IS_PRODUCTION}")
 
@@ -134,7 +138,8 @@ def main():
         marca_cambio = ESPACIO_INVISIBLE
         if parque in cambios_detectados:
             marca_cambio = INDICADOR_CAMBIO
-        post_text += f"{marca_cambio} {emoji_semaforo} {parque}\n"
+        nombre_parque = diccionario_parques.get(parque, parque)
+        post_text += f"{emoji_semaforo} {nombre_parque} {marca_cambio}\n"
     print(post_text)
 
     if hay_cambios:
