@@ -109,21 +109,23 @@ def main():
 
     cambios_detectados = []
     eventos_cambio = []
-    hay_cambios = False
+    hay_cambios_estado = False   # cualquier cambio, incluyendo entre 5 y 6
+    hay_cambios_post = False     # solo cambios visibles (5 y 6 son equivalentes)
     momento_deteccion = datetime.now().astimezone().isoformat(timespec="seconds")
 
     for parque, codigo_actual in datos_actuales.items():
         codigo_anterior = datos_anteriores.get(parque)
         if codigo_anterior != codigo_actual:
-            hay_cambios = True
-            # esto evita que el paso entre 5 y 6 se marque como cambio, ya que de cara al
-            # visitante, el parque sigue cerrado igualmente
+            hay_cambios_estado = True
+            # de cara al visitante, los estados 5 y 6 son ambos "cerrado",
+            # así que no se considera un cambio relevante para el post
             ambos_cerrados = (
                 codigo_anterior is not None
                 and codigo_anterior >= 5
                 and codigo_actual >= 5
             )
             if not ambos_cerrados:
+                hay_cambios_post = True
                 cambios_detectados.append(parque)
             if codigo_anterior is not None:
                 eventos_cambio.append(
@@ -151,9 +153,10 @@ def main():
         post_text += f"{emoji_semaforo} {nombre_parque} {marca_cambio}\n"
     print(post_text)
 
-    if hay_cambios:
+    if hay_cambios_estado:
         guardar_estado_nuevo(datos_actuales)
         guardar_estadisticas(eventos_cambio)
+    if hay_cambios_post:
         if IS_PRODUCTION:
             client = Client()
             client.login(BLUESKY_EMAIL, BLUESKY_PASSWORD)
